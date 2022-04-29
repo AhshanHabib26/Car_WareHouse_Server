@@ -24,14 +24,14 @@ async function carHouse() {
       .db("dealerCollection")
       .collection("dealer");
 
-    app.get("/items", async (req, res) => {
+    app.get("/item", async (req, res) => {
       const query = {};
       const item = carHouseCollection.find(query);
       const result = await item.toArray();
       res.send(result);
     });
 
-    
+
   }
   
   
