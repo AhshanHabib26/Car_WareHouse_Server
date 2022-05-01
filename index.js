@@ -36,9 +36,22 @@ async function carHouse() {
          const query = {_id: ObjectId(id)}
          const result = await carHouseCollection.findOne(query)
          res.send(result)
-
-
     })
+
+    app.put("/item/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedItem = req.body;
+      const itemFilter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = { $set: updatedItem };
+
+      const result = await carHouseCollection.updateOne(
+        itemFilter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
 
 
   }
