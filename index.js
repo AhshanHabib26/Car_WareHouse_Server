@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
@@ -30,6 +30,15 @@ async function carHouse() {
       const result = await item.toArray();
       res.send(result);
     });
+
+    app.get("/item/:id" , async( req, res) =>{
+         const id = req.params.id
+         const query = {_id: ObjectId(id)}
+         const result = await carHouseCollection.findOne(query)
+         res.send(result)
+
+
+    })
 
 
   }
