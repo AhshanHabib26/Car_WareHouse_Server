@@ -38,6 +38,12 @@ async function carHouse() {
          res.send(result)
     })
 
+    app.post("/item", async (req, res) => {
+      const query = req.body;
+      const result = await carHouseCollection.insertOne(query);
+      res.send(result);
+    });
+
     app.put("/item/:id", async (req, res) => {
       const id = req.params.id;
       const updatedItem = req.body;
