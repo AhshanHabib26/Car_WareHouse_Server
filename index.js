@@ -36,7 +36,8 @@ async function carHouse() {
     });
 
     app.get("/additem" , async(req, res) =>{
-      const query = {};
+      const email = req.query.email 
+      const query = {email};
       const additem = userItemsCollection.find(query)
       const result = await additem.toArray()
       res.send(result)
