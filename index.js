@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const { status } = require("express/lib/response");
 require("dotenv").config();
+const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -28,6 +29,15 @@ async function carHouse() {
     const userItemsCollection = client
       .db("dealerCollection")
       .collection("addedItem");
+
+
+    app.post('/getToken', async(req, res) =>{
+        const user = req.body
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
+          expiresIn: '1d'
+        })
+        res.send(accessToken)
+    })
 
     app.post("/additem", async (req, res) => {
       const additem = req.body;
