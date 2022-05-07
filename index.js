@@ -40,11 +40,11 @@ async function carHouse() {
       .collection("blogPost");
 
 
-    app.get('/post', async(req, res)=>{
-      const query = {}
-      const data = blogPostCollection.find(query)
-      const result = await data.toArray()
-      res.send(result)
+    app.get("/post", async (req, res) => {
+      const query = {};
+      const data = blogPostCollection.find(query);
+      const result = await data.toArray();
+      res.send(result);
     })
 
 
