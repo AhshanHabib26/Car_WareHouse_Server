@@ -24,6 +24,16 @@ async function carHouse() {
       .db("dealerCollection")
       .collection("dealer");
 
+    const userItemsCollection = client
+      .db("dealerCollection")
+      .collection("addItem");
+
+      app.post("/addItem", async (req, res) => {
+        const query = req.body;
+        const result = await userItemsCollection.insertOne(query);
+        res.send(result);
+      });  
+
     app.get("/item", async (req, res) => {
       const query = {};
       const item = carHouseCollection.find(query);
@@ -31,12 +41,12 @@ async function carHouse() {
       res.send(result);
     });
 
-    app.get("/item/:id" , async( req, res) =>{
-         const id = req.params.id
-         const query = {_id: ObjectId(id)}
-         const result = await carHouseCollection.findOne(query)
-         res.send(result)
-    })
+    app.get("/item/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await carHouseCollection.findOne(query);
+      res.send(result);
+    });
 
     app.post("/item", async (req, res) => {
       const query = req.body;
@@ -58,14 +68,7 @@ async function carHouse() {
       );
       res.send(result);
     });
-
-
-  }
-  
-  
-  
-  
-  finally {
+  } finally {
   }
 }
 
