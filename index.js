@@ -3,7 +3,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const { status } = require("express/lib/response");
 require("dotenv").config();
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -11,12 +11,19 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-function verifyJWT(req, res, next){
-  const auth = req.headers.authorization
-  if(!auth){
-    return res.status(401).send({message: "Unathoraized Access"})
+function verifyJWT(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth) {
+    return res.status(401).send({ message: "Unathoraized Access" });
   }
-  next()
+  const token = auth.split(" ")[1];
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+    if (err) {
+      return res.status(403).send({ meassage: "Forbiden Access" });
+    }
+    req.decoded = decoded;
+  });
+  next();
 }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cgq9d.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -38,12 +45,11 @@ async function carHouse() {
       .db("dealerCollection")
       .collection("addedItem");
 
-
-    app.post('/getToken', async(req, res) =>{
-      const user = req.body
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN)
-      res.send({accessToken})
-    })
+    app.post("/getToken", async (req, res) => {
+      const user = req.body;
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
+      res.send({ accessToken });
+    });
 
     app.post("/additem", async (req, res) => {
       const additem = req.body;
@@ -51,15 +57,20 @@ async function carHouse() {
       res.send(result);
     });
 
-    app.get("/additem", verifyJWT , async(req, res) =>{
-      const email = req.query.email 
-      const query = {Email: email};
-      const additem = userItemsCollection.find(query)
-      const result = await additem.toArray()
-      res.send(result)
-    })
+    app.get("/additem", verifyJWT, async (req, res) => {
+      const decEmail = req.decoded.email;
+      const email = req.query.email;
+      if (email === decEmail) {
+        const query = { Email: email };
+        const additem = userItemsCollection.find(query);
+        const result = await additem.toArray();
+        res.send(result);
+      }
+      else{
+        return res.status(403).send({ meassage: "Forbiden Access" });
+      }
+    });
 
-  
     app.get("/item", async (req, res) => {
       const query = {};
       const item = carHouseCollection.find(query);
