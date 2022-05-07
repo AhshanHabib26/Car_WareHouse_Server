@@ -26,9 +26,29 @@ async function carHouse() {
       .db("dealerCollection")
       .collection("dealer");
 
+    // User  Added Item  
+
     const userItemsCollection = client
       .db("dealerCollection")
       .collection("addedItem");
+
+    
+    // Blog Post Collection
+
+    const blogPostCollection = client
+      .db("delerCollection")
+      .collection("blogPost");
+
+
+    app.get('/post', async(req, res)=>{
+      const query = {}
+      const data = blogPostCollection.find(query)
+      const result = await data.toArray()
+      res.send(result)
+    })
+
+
+    // JWT Token  
 
     app.post("/getToken", async (req, res) => {
       const user = req.body;
@@ -98,7 +118,6 @@ async function carHouse() {
       const result = await carHouseCollection.deleteOne(query);
       res.send(result);
     });
-
   } finally {
   }
 }
