@@ -99,6 +99,14 @@ async function carHouse() {
       );
       res.send(result);
     });
+
+    app.delete("/item/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await foodsCollection.deleteOne(query);
+      res.send(result);
+    });
+
   } finally {
   }
 }
