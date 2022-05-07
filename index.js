@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
+const { status } = require("express/lib/response");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -33,6 +34,13 @@ async function carHouse() {
       const result = await userItemsCollection.insertOne(additem);
       res.send(result);
     });
+
+    app.get("additem" , async(req, res) =>{
+      const query = {};
+      const additem = userItemsCollection.find(query)
+      const result = await additem.toArray()
+      res.send(result)
+    })
 
   
     app.get("/item", async (req, res) => {
