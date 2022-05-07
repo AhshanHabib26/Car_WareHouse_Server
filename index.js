@@ -58,14 +58,11 @@ async function carHouse() {
     });
 
     app.get("/additem", async (req, res) => {
-      const auth = req.headers.authorization;
-      const [email, token] = auth.split(" ");
-      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
-      if (email === decoded.email) {
-        const additem = userItemsCollection.find(query);
-        const result = await additem.toArray();
-        res.send(result);
-      }
+      const email = req.query.email;
+      const query = { Email: email };
+      const additem = userItemsCollection.find(query);
+      const result = await additem.toArray();
+      res.send(result);
     });
 
     app.get("/item", async (req, res) => {
