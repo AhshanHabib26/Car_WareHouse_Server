@@ -26,14 +26,15 @@ async function carHouse() {
 
     const userItemsCollection = client
       .db("dealerCollection")
-      .collection("addItem");
+      .collection("addedItem");
 
-      app.post("/addItem", async (req, res) => {
-        const query = req.body;
-        const result = await userItemsCollection.insertOne(query);
-        res.send(result);
-      });  
+    app.post("/additem", async (req, res) => {
+      const additem = req.body;
+      const result = await userItemsCollection.insertOne(additem);
+      res.send(result);
+    });
 
+  
     app.get("/item", async (req, res) => {
       const query = {};
       const item = carHouseCollection.find(query);
