@@ -11,20 +11,20 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-function verifyJWT(req, res, next) {
-  const auth = req.headers.authorization;
-  if (!auth) {
-    return res.status(401).send({ message: "Unathoraized Access" });
-  }
-  const token = auth.split(" ")[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
-    if (err) {
-      return res.status(403).send({ meassage: "Forbiden Access" });
-    }
-    req.decoded = decoded;
-  });
-  next();
-}
+// function verifyJWT(req, res, next) {
+//   const auth = req.headers.authorization;
+//   if (!auth) {
+//     return res.status(401).send({ message: "Unathoraized Access" });
+//   }
+//   const token = auth.split(" ")[1];
+//   jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+//     if (err) {
+//       return res.status(403).send({ meassage: "Forbiden Access" });
+//     }
+//     req.decoded = decoded;
+//   });
+//   next();
+// }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cgq9d.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 console.log(uri);
@@ -57,18 +57,12 @@ async function carHouse() {
       res.send(result);
     });
 
-    app.get("/additem", verifyJWT, async (req, res) => {
-      const decEmail = req.decoded.email;
+    app.get("/additem", async (req, res) => {
       const email = req.query.email;
-      if (email === decEmail) {
-        const query = { Email: email };
-        const additem = userItemsCollection.find(query);
-        const result = await additem.toArray();
-        res.send(result);
-      }
-      else{
-        return res.status(403).send({ meassage: "Forbiden Access" });
-      }
+      const query = { Email: email };
+      const additem = userItemsCollection.find(query);
+      const result = await additem.toArray();
+      res.send(result);
     });
 
     app.get("/item", async (req, res) => {
