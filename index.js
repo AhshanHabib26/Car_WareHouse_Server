@@ -32,8 +32,9 @@ async function carHouse() {
 
 
     app.post('/getToken', async(req, res) =>{
-       const email = req.body
-       res.send(email)
+      const user = req.body
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN)
+      res.send(accessToken)
     })
 
     app.post("/additem", async (req, res) => {
