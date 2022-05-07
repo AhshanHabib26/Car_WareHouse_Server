@@ -26,23 +26,13 @@ async function carHouse() {
       .db("dealerCollection")
       .collection("dealer");
 
-    // User  Added Item  
 
     const userItemsCollection = client
       .db("dealerCollection")
       .collection("addedItem");
 
-    
-    // Blog Post Collection
-
-    const blogPostCollection = client
-      .db("delerCollection")
-      .collection("blogPost");
-
-
-    
-    // JWT Token  
-
+  
+  
     app.post("/getToken", async (req, res) => {
       const user = req.body;
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
@@ -67,13 +57,6 @@ async function carHouse() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await userItemsCollection.deleteOne(query);
-      res.send(result);
-    });
-
-    app.get("blog", async (req, res) => {
-      const query = {};
-      const item = blogPostCollection.find(query);
-      const result = await item.toArray();
       res.send(result);
     });
 
