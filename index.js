@@ -40,14 +40,7 @@ async function carHouse() {
       .collection("blogPost");
 
 
-    app.get("/post", async (req, res) => {
-      const query = {};
-      const data = blogPostCollection.find(query);
-      const result = await data.toArray();
-      res.send(result);
-    })
-
-
+    
     // JWT Token  
 
     app.post("/getToken", async (req, res) => {
@@ -74,6 +67,13 @@ async function carHouse() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await userItemsCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.get("blog", async (req, res) => {
+      const query = {};
+      const item = blogPostCollection.find(query);
+      const result = await item.toArray();
       res.send(result);
     });
 
